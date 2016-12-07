@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>文字查找、替换、删除</title>
+    <style>
+        /*清除默认样式*/
+        body,div,ul,p,li{padding:0; margin:0;}
+        li{list-style:none;}
+
+        .clearfix{
+            zoom:1;}
+
+        .clearfix:after{
+            display:block;
+            clear:both;
+            content:"";
+            visibility:hidden;
+            height:0;}
+        /*包裹层*/
+        #wrap{width:600px; height:500px; border:4px solid #39c0b2;  position:absolute; top:50%; left:50%; margin-left:-304px; margin-top:-254px; }
+        #text{width:400px; height:300px; margin:20px auto; border:1px solid #39c0b2; padding:5px; font-size:16px; line-height:26px; }
+        #text span{background:#FF0;}
+
+        #menu{position:absolute; top:20px; left:520px; width:60px; height:35px; line-height:35px; text-align:center; background:#36F; cursor:pointer; color:#fff; border-bottom:1px solid #fff;}
+        #submenu{position:absolute; top:56px; left:520px; display:none;}
+        #submenu li{width:60px; height:35px; background:#36F;line-height:35px; text-align:center; cursor:pointer; border-bottom:1px solid #fff; color:#fff;}
+
+        #box{width:400px; height:120px; border:#39c0b2 3px solid; margin:0 auto; position:relative; display:none;}
+        #box ul{width:400px; height:30px; border-bottom:2px solid #39c0b2; }
+        #box li{float:left; width:80px; height:30px;  line-height:30px; text-align:center; background:#36f; cursor:pointer; margin-right:1px; color:#333; font-weight:bold;}
+        #box img{width:10px; height:10px; position:absolute; top:5px; right:5px;}
+        #search, #replace{ margin-left:5px; margin-top:20px; }
+        #search{}
+        #replace{}
+
+        input{background:none;  border-radius:5px; border-color:#39c0b2;}
+    </style>
+
+    <script>
+
+        window.onload = function(){
+            var oMenu = document.getElementById('menu');
+            var oSubmenu = document.getElementById('submenu');
+            var aLi1 = oSubmenu.getElementsByTagName('li');
+            var oBox = document.getElementById('box');
+            var oUl = oBox.getElementsByTagName('ul')[0];
+            var aLi2 = oUl.getElementsByTagName('li');
+            var aDiv = oBox.getElementsByTagName('div');
+            var oOff = oBox.getElementsByTagName('img')[0];
+
+            var oSearch = document.getElementById('search');
+            var oReplace = document.getElementById('replace');
+            var aInpS = oSearch.getElementsByTagName('input');
+            var aInpR = oReplace.getElementsByTagName('input');
+            var oText = document.getElementById('text');
+
+            var onOff = true;
+
+//点击展开，显示替换&查找选项
+            oMenu.onclick = function(){
+                if(onOff){
+                    oSubmenu.style.display = 'block';
+                    onOff = false;
+                }else{
+                    oSubmenu.style.display = 'none';
+                    onOff = true;
+                }
+            }
+//替换&查找选项 鼠标 移入、移出、点击
+            for(var i=0;i<aLi1.length;i++){
+                aLi1[i].index = i;
+                aLi1[i].onmouseover = function(){
+                    this.style.background = '#fc6';
+                }
+                aLi1[i].onmouseout = function(){
+                    this.style.background = '#36f';
+                }
+                aLi1[i].onclick = function(){
+                    oBox.style.display = 'block';
+                    for(var i=0;i<aLi2.length;i++){
+                        aLi2[i].style.background = '#36f';
+                        aDiv[i].style.display = 'none';
+                    }
+                    aLi2[this.index].style.background = '#fc6';
+                    aDiv[this.index].style.display = 'block';
+                    oSubmenu.style.display = 'none';
+                    onOff = true;
+                }
+            }
+//点击叉叉 关闭查找&替换操作框
+            oOff.onclick = function(){
+                oBox.style.display = 'none';
+            }
+//点击操作框内的查找&替换 相互切换
+            for(var i=0;i<aLi2.length;i++){
+                aLi2[i].index = i;
+
+                aLi2[i].onclick = function(){
+                    for(var i=0;i<aLi2.length;i++){
+                        aLi2[i].style.background = '#36f';
+                        aDiv[i].style.display = 'none';
+                    }
+                    this.style.background = '#fc6';
+                    aDiv[this.index].style.display = 'block';
+                }
+            }
+//查找-高亮
+            var p = oText.innerHTML;
+            aInpS[1].onclick = function(){
+                var str = aInpS[0].value;
+                if(str == ''){
+                    alert('请输入要查找的内容');
+                }else if(p.split(str) == p){
+                    alert('对不起，没有找到您输入的：【'+str+'】');}
+                oText.innerHTML = p.split(str).join('<span>'+str+'</span>');
+            }
+//替换
+            aInpR[2].onclick = function(){
+                var str = aInpR[0].value;
+                var newStr = aInpR[1].value;
+                if(str == ''){
+                    alert('请输入要替换的内容');
+                }else if(str !== '' && newStr == ''){
+                    if(confirm('您确定要删除：【'+str+'】吗？')){
+                        oText.innerHTML = p.split(str);
+                    }else{
+                        oText.innerHTML = p;
+                    }
+                }else{
+                    oText.innerHTML = p.split(str).join('<span>'+newStr+'</span>');
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+<!--包裹层-->
+<div id="wrap">
+    <p id="text">王岐山指出，相对于中华民族伟大复兴的漫漫征程，我们迈出的每一步都是万里长征的新起点。要把学习领会、贯彻落实六中全会精神同“两学一做”学习教育结合起来，把全面从严治党与全面深化改革、全面依法治国有机统一起来，联系思想和工作实际，结合所在地区和部门的问题，在坚持和深化中不断增强“四个意识”。一个时期以来，党内存在的突出矛盾和问题，归其根本在于党内政治生活不正常，加强和规范党内政治生活有极强的现实针对性。要把制度蕴含的力量充分释放出来，严明政治纪律和政治规矩，净化党内政治生态。</p>
+    <div id="box">
+        <ul class="clearfix">
+            <li>查找</li>
+            <li>替换</li>
+        </ul>
+        <div id="search">
+            <input type="text" />
+            <input type="button" value='查找'/>
+        </div>
+        <div id='replace'>
+            <input type="text" />
+            <input type="text" />
+            <input type="button" value='替换'/>
+        </div>
+        <img src="img/shanchu.png" />
+    </div>
+    <p id="menu">点我</p>
+    <ul id="submenu">
+        <li>查找</li>
+        <li>替换</li>
+    </ul>
+</div>
+
+</body>
+</html>
