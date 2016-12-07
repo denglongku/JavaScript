@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>文字搬运工</title>
+    <style>
+        /*清除默认样式*/
+        body,div,ul,p{padding:0; margin:0;}
+        li{list-style:none;}
+
+        #wrap{width:940px; height:355px; border:1px solid #39c0b2;  position:absolute; top:50%; left:50%; margin-left:-480px; margin-top:-200px;}
+        textarea{position:absolute; top:5px; left:5px; border:1px dotted #666; background:#FFC; padding:10px; line-height:20px;}
+        .unread{position:absolute; top:5px; left: 600px; background:#9CF;}
+
+        #box{width:100px;  position:absolute; top:5px; left:430px; }
+        #box input{width:100px; height:50px; background:#F63; border:none; color:#fff; font-size:18px; font-weight:bold;}
+        #box p{text-align:center; margin:10px 0;}
+        #box ul{}
+        #box li{width:10px; height:15px; background:#F99; float:left; margin-left:3px; }
+    </style>
+
+    <script>
+
+        window.onload = function(){
+            var oBtn = document.getElementById('btn');
+            var oP = document.getElementById('num');
+            var aSpan = oP.getElementsByTagName('span');
+            var aText = document.getElementsByTagName('textarea');
+            var oUl = document.getElementById('ul');
+            var aLi = oUl.getElementsByTagName('li');
+
+            var n = aText[0].value.length;
+            oBtn.onclick = function(){
+                this.style.background ='#ccc';
+                aSpan[1].innerHTML = n;
+
+                clearInterval(timer);
+                var i = 0;
+                var timer = setInterval(function(){
+                    aText[1].innerHTML += aText[0].innerHTML.substring(0,1);
+                    aText[0].innerHTML = aText[0].innerHTML.slice(1);
+
+
+                    aSpan[0].innerHTML = aText[1].value.length;
+                    aLi[i].style.background = '#F99';
+                    i++;
+                    aLi[i].style.background = '#F3F';
+                    if(i >= aLi.length-1){
+                        i=0;
+                        aLi[i].style.background = '#F3F';}
+                    if(aSpan[0].innerHTML == n ){clearInterval(timer);}
+
+                },100)
+            }
+        }
+    </script>
+</head>
+
+<body>
+<!--包裹层-->
+<div id="wrap">
+    <textarea class='' rows='15' cols="35">十年耕耘，十年收获。在金砖国家合作１０周年的重要年份，中国、印度、南非、巴西、俄罗斯等五国领导人齐聚印度果阿，盘点合作成果，擘画发展蓝图。“经过１０年发展，金砖国家合作已经是枝繁叶茂、树大根深。我们完全有能力化挑战为机遇，化压力为动力，同舟共济，共克时艰。”在金砖国家领导人第八次会晤上，习近平主席审时度势、鉴往知来，为促进金砖国家合作布局谋篇，为推动共同发展开出中国良方，向世界释放出团结合作、共创未来的积极信号。</textarea>
+
+    <textarea class='unread' rows='15' cols="35"></textarea>
+    <div id="box">
+        <input id='btn' type="button" value="把文字右移" />
+        <p id="num"><span>0</span>/<span>0</span></p>
+        <ul id="ul">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
