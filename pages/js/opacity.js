@@ -28,4 +28,4 @@ function css(obj,attr){
     }else{
         return getComputedStyle(obj,false)[attr];
     }
-}  
+}
